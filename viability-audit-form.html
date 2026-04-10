@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Public Sector Viability Audit — Tendigo</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#FAFAF7;--card:#FFFFFF;--border:#E5E3DC;--border-focus:#1A3A2A;
+  --text:#1A1A18;--text-muted:#6B6A65;--text-hint:#9C9A92;
+  --accent:#1A3A2A;--accent-light:#E8F0EB;--accent-hover:#264D38;
+  --error:#B33A3A;--error-bg:#FEF2F2;
+  --radius:10px;--radius-lg:16px;
+  --font:'DM Sans',system-ui,sans-serif;--font-display:'DM Serif Display',Georgia,serif;
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+
+.container{max-width:720px;margin:0 auto;padding:24px 20px 80px}
+
+/* Hero */
+.hero{text-align:center;padding:56px 24px 48px;margin-bottom:40px}
+.hero-badge{display:inline-block;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);background:var(--accent-light);padding:6px 16px;border-radius:20px;margin-bottom:20px}
+.hero h1{font-family:var(--font-display);font-size:clamp(28px,5vw,40px);font-weight:400;color:var(--text);line-height:1.2;margin-bottom:16px}
+.hero p{font-size:15px;color:var(--text-muted);max-width:540px;margin:0 auto;line-height:1.7}
+
+/* Info box */
+.info-box{background:var(--accent-light);border-radius:var(--radius-lg);padding:24px 28px;margin-bottom:40px;border:1px solid rgba(26,58,42,0.08)}
+.info-box h3{font-size:14px;font-weight:600;color:var(--accent);margin-bottom:12px}
+.info-box ul{list-style:none;padding:0}
+.info-box li{font-size:14px;color:var(--text-muted);padding:4px 0 4px 20px;position:relative}
+.info-box li::before{content:"";position:absolute;left:0;top:11px;width:6px;height:6px;border-radius:50%;background:var(--accent);opacity:.4}
+
+/* Sections */
+.form-section{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:36px 32px;margin-bottom:24px;transition:box-shadow .2s}
+.form-section:focus-within{box-shadow:0 2px 20px rgba(26,58,42,0.06)}
+.section-number{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-hint);margin-bottom:6px}
+.section-title{font-family:var(--font-display);font-size:22px;font-weight:400;color:var(--text);margin-bottom:24px}
+
+/* Fields */
+.field{margin-bottom:24px}
+.field:last-child{margin-bottom:0}
+.field label,.field-label{display:block;font-size:14px;font-weight:600;color:var(--text);margin-bottom:6px}
+.field label .req{color:var(--error);margin-left:2px}
+.field-hint{font-size:13px;color:var(--text-hint);margin-bottom:8px;line-height:1.5}
+
+input[type="text"],input[type="email"],input[type="tel"],input[type="url"],textarea,select{
+  width:100%;font-family:var(--font);font-size:15px;color:var(--text);
+  background:var(--bg);border:1.5px solid var(--border);border-radius:var(--radius);
+  padding:12px 16px;transition:border-color .2s,box-shadow .2s;outline:none;
+}
+input:focus,textarea:focus,select:focus{border-color:var(--border-focus);box-shadow:0 0 0 3px rgba(26,58,42,0.08)}
+textarea{resize:vertical;min-height:100px}
+input::placeholder,textarea::placeholder{color:var(--text-hint)}
+
+/* Radio & Checkbox groups */
+.option-group{display:flex;flex-direction:column;gap:8px}
+.option-group.inline{flex-direction:row;flex-wrap:wrap;gap:10px}
+.option-item{position:relative}
+.option-item input{position:absolute;opacity:0;width:0;height:0}
+.option-item label{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:400;color:var(--text);padding:10px 16px;border:1.5px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:all .15s;background:var(--card)}
+.option-item label:hover{border-color:var(--accent);background:var(--accent-light)}
+.option-item input:checked+label{border-color:var(--accent);background:var(--accent-light);font-weight:500}
+.option-item .indicator{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.option-item input:checked+label .indicator{border-color:var(--accent);background:var(--accent)}
+.option-item input:checked+label .indicator::after{content:"";width:6px;height:6px;border-radius:50%;background:#fff}
+.option-item .indicator.check{border-radius:4px}
+.option-item input:checked+label .indicator.check::after{content:"";width:10px;height:8px;border-radius:0;background:none;border-left:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(-45deg) translateY(-1px);margin-top:-2px}
+
+/* Scale */
+.scale-row{display:flex;gap:0;margin-top:8px}
+.scale-item{flex:1}
+.scale-item input{position:absolute;opacity:0}
+.scale-item label{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px;border:1.5px solid var(--border);cursor:pointer;transition:all .15s;font-size:15px;font-weight:500;color:var(--text-muted);background:var(--card)}
+.scale-item:first-child label{border-radius:var(--radius) 0 0 var(--radius)}
+.scale-item:last-child label{border-radius:0 var(--radius) var(--radius) 0}
+.scale-item:not(:first-child) label{border-left:none}
+.scale-item input:checked+label{background:var(--accent);color:#fff;border-color:var(--accent)}
+.scale-labels{display:flex;justify-content:space-between;margin-top:6px}
+.scale-labels span{font-size:12px;color:var(--text-hint)}
+
+/* Conditional fields */
+.conditional{display:none;margin-top:12px;padding:16px;background:var(--bg);border-radius:var(--radius);border:1px dashed var(--border)}
+.conditional.visible{display:block}
+
+/* Confirmation checkboxes */
+.confirm-group{display:flex;flex-direction:column;gap:12px}
+.confirm-item{display:flex;align-items:flex-start;gap:12px;font-size:14px;color:var(--text-muted);line-height:1.5}
+.confirm-item input[type="checkbox"]{width:20px;height:20px;margin-top:2px;accent-color:var(--accent);flex-shrink:0}
+
+/* Submit */
+.submit-area{text-align:center;padding:40px 0 0}
+.submit-btn{font-family:var(--font);font-size:16px;font-weight:600;color:#fff;background:var(--accent);border:none;border-radius:var(--radius);padding:16px 48px;cursor:pointer;transition:all .2s;letter-spacing:0.3px}
+.submit-btn:hover{background:var(--accent-hover);transform:translateY(-1px);box-shadow:0 4px 16px rgba(26,58,42,0.2)}
+.submit-btn:active{transform:translateY(0)}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+.submit-note{font-size:13px;color:var(--text-hint);margin-top:12px}
+
+/* Success state */
+.success-card{display:none;background:var(--card);border:2px solid var(--accent);border-radius:var(--radius-lg);padding:48px 32px;text-align:center;margin-top:40px}
+.success-card.visible{display:block}
+.success-icon{width:64px;height:64px;background:var(--accent-light);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:28px}
+.success-card h2{font-family:var(--font-display);font-size:24px;margin-bottom:12px}
+.success-card p{font-size:15px;color:var(--text-muted);line-height:1.6}
+
+/* Validation */
+.field.error input,.field.error textarea,.field.error select{border-color:var(--error)}
+.error-msg{font-size:12px;color:var(--error);margin-top:4px;display:none}
+.field.error .error-msg{display:block}
+
+/* Footer */
+.form-footer{text-align:center;padding:32px 0;font-size:13px;color:var(--text-hint)}
+.form-footer a{color:var(--accent);text-decoration:none}
+
+/* Progress */
+.progress-bar{position:fixed;top:0;left:0;height:3px;background:var(--accent);transition:width .3s;z-index:100;width:0}
+
+@media(max-width:600px){
+  .container{padding:16px 14px 60px}
+  .form-section{padding:24px 20px}
+  .hero{padding:40px 16px 36px}
+  .scale-item label{padding:12px 4px;font-size:14px}
+  .option-group.inline{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<div class="container">
+
+<div class="hero">
+  <div class="hero-badge">Tendigo</div>
+  <h1>Public Sector Viability Audit</h1>
+  <p>This form helps us prepare your audit. We'll assess whether public sector contracts are a viable route for your business, what types of opportunities to pursue, and whether ongoing monitoring makes sense.</p>
+</div>
+
+<div class="info-box">
+  <h3>Before you start</h3>
+  <ul>
+    <li>This takes approximately 15 minutes</li>
+    <li>Have your company website and service descriptions ready</li>
+    <li>Details of current or recent contracts</li>
+    <li>Case studies or testimonials (if you have them)</li>
+    <li>Accreditations or certifications (if applicable)</li>
+  </ul>
+</div>
+
+<form id="auditForm" novalidate>
+
+<!-- SECTION 1: Company Basics -->
+<div class="form-section" data-section="1">
+  <div class="section-number">Section 1 of 7</div>
+  <div class="section-title">Company basics</div>
+
+  <div class="field">
+    <label>Email address <span class="req">*</span></label>
+    <input type="email" name="email" required placeholder="you@company.com">
+    <div class="error-msg">Please enter a valid email address</div>
+  </div>
+
+  <div class="field">
+    <label>Company name <span class="req">*</span></label>
+    <input type="text" name="company_name" required placeholder="e.g. Acme Solutions Ltd">
+    <div class="error-msg">Required</div>
+  </div>
+
+  <div class="field">
+    <label>Company website <span class="req">*</span></label>
+    <input type="url" name="company_website" required placeholder="https://www.example.com">
+    <div class="error-msg">Required</div>
+  </div>
+
+  <div class="field">
+    <label>Full name <span class="req">*</span></label>
+    <input type="text" name="full_name" required placeholder="First and last name">
+    <div class="error-msg">Required</div>
+  </div>
+
+  <div class="field">
+    <label>Phone number <span class="req">*</span></label>
+    <input type="tel" name="phone" required placeholder="e.g. 07700 900000">
+    <div class="error-msg">Required</div>
+  </div>
+
+  <div class="field">
+    <label>Your role in the business <span class="req">*</span></label>
+    <div class="option-group">
+      <div class="option-item"><input type="radio" name="role" id="role_1" value="Founder/Owner" required><label for="role_1"><span class="indicator"></span>Founder / Owner</label></div>
+      <div class="option-item"><input type="radio" name="role" id="role_2" value="Director"><label for="role_2"><span class="indicator"></span>Director</label></div>
+      <div class="option-item"><input type="radio" name="role" id="role_3" value="Sales/Commercial"><label for="role_3"><span class="indicator"></span>Sales / Commercial</label></div>
+      <div class="option-item"><input type="radio" name="role" id="role_4" value="Operations/Delivery"><label for="role_4"><span class="indicator"></span>Operations / Delivery</label></div>
+      <div class="option-item"><input type="radio" name="role" id="role_5" value="Bid/Procurement"><label for="role_5"><span class="indicator"></span>Bid / Procurement</label></div>
+      <div class="option-item"><input type="radio" name="role" id="role_6" value="Other" data-shows="role_other_field"><label for="role_6"><span class="indicator"></span>Other</label></div>
+    </div>
+    <div class="conditional" id="role_other_field">
+      <input type="text" name="role_other" placeholder="Please specify your role">
+    </div>
+    <div class="error-msg">Please select your role</div>
+  </div>
+</div>
+
+<!-- SECTION 2: Products / Services -->
+<div class="form-section" data-section="2">
+  <div class="section-number">Section 2 of 7</div>
+  <div class="section-title">Products &amp; services</div>
+
+  <div class="field">
+    <label>In one sentence, what do you sell, and to whom? <span class="req">*</span></label>
+    <textarea name="what_you_sell" required placeholder="e.g. We provide bespoke software development services to mid-sized financial services firms"></textarea>
+    <div class="error-msg">Required</div>
+  </div>
+
+  <div class="field">
+    <label>List your core services or products (up to 5) <span class="req">*</span></label>
+    <textarea name="core_services" required placeholder="1. &#10;2. &#10;3. &#10;4. &#10;5. "></textarea>
+    <div class="error-msg">Required</div>
+  </div>
+
+  <div class="field">
+    <label>What do you NOT do? <span class="req">*</span></label>
+    <div class="field-hint">Common misconceptions about your business — what do people wrongly assume you offer?</div>
+    <textarea name="what_you_dont_do" required placeholder="e.g. We are not a staffing agency. We do not provide off-the-shelf software..."></textarea>
+    <div class="error-msg">Required</div>
+  </div>
+
+  <div class="field">
+    <label>Where do you deliver? <span class="req">*</span></label>
+    <div class="option-group">
+      <div class="option-item"><input type="checkbox" name="delivery_geography" id="geo_1" value="UK wide"><label for="geo_1"><span class="indicator check"></span>UK wide</label></div>
+      <div class="option-item"><input type="checkbox" name="delivery_geography" id="geo_2" value="England only"><label for="geo_2"><span class="indicator check"></span>England only</label></div>
+      <div class="option-item"><input type="checkbox" name="delivery_geography" id="geo_3" value="Scotland"><label for="geo_3"><span class="indicator check"></span>Scotland</label></div>
+      <div class="option-item"><input type="checkbox" name="delivery_geography" id="geo_4" value="Wales"><label for="geo_4"><span class="indicator check"></span>Wales</label></div>
+      <div class="option-item"><input type="checkbox" name="delivery_geography" id="geo_5" value="Northern Ireland"><label for="geo_5"><span class="indicator check"></span>Northern Ireland</label></div>
+      <div class="option-item"><input type="checkbox" name="delivery_geography" id="geo_6" value="Regional only" data-shows="regional_field"><label for="geo_6"><span class="indicator check"></span>Regional only</label></div>
+      <div class="option-item"><input type="checkbox" name="delivery_geography" id="geo_7" value="International"><label for="geo_7"><span class="indicator check"></span>We also have international customers</label></div>
+    </div>
+    <div class="conditional" id="regional_field">
+      <input type="text" name="regional_specify" placeholder="Please specify region(s)">
+    </div>
+    <div class="error-msg">Please select at least one</div>
+  </div>
+</div>
+
+<!-- SECTION 3: Capacity & Commercial Reality -->
+<div class="form-section" data-section="3">
+  <div class="section-number">Section 3 of 7</div>
+  <div class="section-title">Capacity &amp; commercial reality</div>
+
+  <div class="field">
+    <label>Current team size <span class="req">*</span></label>
+    <div class="option-group">
+      <div class="option-item"><input type="radio" name="team_size" id="ts_1" value="Just me" required><label for="ts_1"><span class="indicator"></span>Just me</label></div>
+      <div class="option-item"><input type="radio" name="team_size" id="ts_2" value="2-5"><label for="ts_2"><span class="indicator"></span>2–5</label></div>
+      <div class="option-item"><input type="radio" name="team_size" id="ts_3" value="6-15"><label for="ts_3"><span class="indicator"></span>6–15</label></div>
+      <div class="option-item"><input type="radio" name="team_size" id="ts_4" value="16-50"><label for="ts_4"><span class="indicator"></span>16–50</label></div>
+      <div class="option-item"><input type="radio" name="team_size" id="ts_5" value="50+"><label for="ts_5"><span class="indicator"></span>50+</label></div>
+    </div>
+    <div class="error-msg">Required</div>
+  </div>
+
+  <div class="field">
+    <label>Approximate annual turnover <span class="req">*</span></label>
+    <div class="option-group">
+      <div class="option-item"><input type="radio" name="turnover" id="to_1" value="Under £250k" required><label for="to_1"><span class="indicator"></span>Under £250k</label></div>
+      <div class="option-item"><input type="radio" name="turnover" id="to_2" value="£250k-£1m"><label for="to_2"><span class="indicator"></span>£250k – £1m</label></div>
+      <div class="option-item"><input type="radio" name="turnover" id="to_3" value="£1m-£5m"><label for="to_3"><span class="indicator"></span>£1m – £5m</label></div>
+      <div class="option-item"><input type="radio" name="turnover" id="to_4" value="£5m+"><label for="to_4"><span class="indicator"></span>£5m+</label></div>
+    </div>
+    <div class="error-msg">Required</div>
+  </div>
+
+  <div class="field">
+    <label>What contract value range is realistic for you right now? <span class="req">*</span></label>
+    <div class="option-group">
+      <div class="option-item"><input type="radio" name="contract_value" id="cv_1" value="Under £25k" required><label for="cv_1"><span class="indicator"></span>Under £25k</label></div>
+      <div class="option-item"><input type="radio" name="contract_value" id="cv_2" value="£25k-£100k"><label for="cv_2"><span class="indicator"></span>£25k – £100k</label></div>
+      <div class="option-item"><input type="radio" name="contract_value" id="cv_3" value="£100k-£250k"><label for="cv_3"><span class="indicator"></span>£100k – £250k</label></div>
+      <div class="option-item"><input type="radio" name="contract_value" id="cv_4" value="£250k-£1m"><label for="cv_4"><span class="indicator"></span>£250k – £1m</label></div>
+      <div class="option-item"><input type="radio" name="contract_value" id="cv_5" value="£1m+"><label for="cv_5"><span class="indicator"></span>£1m+</label></div>
+    </div>
+    <div class="error-msg">Required</div>
+  </div>
+
+  <div class="field">
+    <label>Delivery model <span class="req">*</span></label>
+    <div class="option-group">
+      <div class="option-item"><input type="radio" name="delivery_model" id="dm_1" value="In house delivery team" required><label for="dm_1"><span class="indicator"></span>In-house delivery team</label></div>
+      <div class="option-item"><input type="radio" name="delivery_model" id="dm_2" value="Subcontractors"><label for="dm_2"><span class="indicator"></span>Subcontractors</label></div>
+      <div class="option-item"><input type="radio" name="delivery_model" id="dm_3" value="Delivery Partners"><label for="dm_3"><span class="indicator"></span>Delivery partners</label></div>
+      <div class="option-item"><input type="radio" name="delivery_model" id="dm_4" value="Mixed"><label for="dm_4"><span class="indicator"></span>Mixed</label></div>
+    </div>
+    <div class="error-msg">Required</div>
+  </div>
+
+  <div class="field">
+    <label>Do you have capacity to deliver within 30–60 days if you win? <span class="req">*</span></label>
+    <div class="option-group inline">
+      <div class="option-item"><input type="radio" name="capacity_30_60" id="cap_1" value="Yes" required><label for="cap_1"><span class="indicator"></span>Yes</label></div>
+      <div class="option-item"><input type="radio" name="capacity_30_60" id="cap_2" value="Probably"><label for="cap_2"><span class="indicator"></span>Probably</label></div>
+      <div class="option-item"><input type="radio" name="capacity_30_60" id="cap_3" value="No"><label for="cap_3"><span class="indicator"></span>No</label></div>
+      <div class="option-item"><input type="radio" name="capacity_30_60" id="cap_4" value="Not sure"><label for="cap_4"><span class="indicator"></span>Not sure</label></div>
+    </div>
+    <div class="error-msg">Required</div>
+  </div>
+</div>
+
+<!-- SECTION 4: Public Sector Experience -->
+<div class="form-section" data-section="4">
+  <div class="section-number">Section 4 of 7</div>
+  <div class="section-title">Public sector experience</div>
+
+  <div class="field">
+    <label>Have you sold to the public sector before? <span class="req">*</span></label>
+    <div class="option-group">
+      <div class="option-item"><input type="radio" name="ps_experience" id="ps_1" value="Yes, direct contracts" required><label for="ps_1"><span class="indicator"></span>Yes, direct contracts</label></div>
+      <div class="option-item"><input type="radio" name="ps_experience" id="ps_2" value="Yes, as a subcontractor"><label for="ps_2"><span class="indicator"></span>Yes, as a subcontractor</label></div>
+      <div class="option-item"><input type="radio" name="ps_experience" id="ps_3" value="No, but we've bid"><label for="ps_3"><span class="indicator"></span>No, but we've bid</label></div>
+      <div class="option-item"><input type="radio" name="ps_experience" id="ps_4" value="No, totally new"><label for="ps_4"><span class="indicator"></span>No, totally new</label></div>
+    </div>
+    <div class="error-msg">Required</div>
+  </div>
+
+  <div class="field">
+    <label>If you've bid before, what best describes your experience? <span class="req">*</span></label>
+    <div class="option-group">
+      <div class="option-item"><input type="radio" name="bid_experience" id="be_1" value="Never bid" required><label for="be_1"><span class="indicator"></span>Never bid</label></div>
+      <div class="option-item"><input type="radio" name="bid_experience" id="be_2" value="Bid once or twice, no wins"><label for="be_2"><span class="indicator"></span>Bid once or twice, no wins</label></div>
+      <div class="option-item"><input type="radio" name="bid_experience" id="be_3" value="Bid a few times, no wins"><label for="be_3"><span class="indicator"></span>Bid a few times, no wins</label></div>
+      <div class="option-item"><input type="radio" name="bid_experience" id="be_4" value="Won one"><label for="be_4"><span class="indicator"></span>Won one</label></div>
+      <div class="option-item"><input type="radio" name="bid_experience" id="be_5" value="Won multiple"><label for="be_5"><span class="indicator"></span>Won multiple</label></div>
+    </div>
+    <div class="error-msg">Required</div>
+  </div>
+
+  <div class="field">
+    <label>Links to case studies, portfolio pages, or testimonials</label>
+    <div class="field-hint">Add up to 3 links (optional)</div>
+    <textarea name="case_study_links" rows="3" placeholder="https://...&#10;https://...&#10;https://..."></textarea>
+  </div>
+
+  <div class="field">
+    <label>List your current key contracts (public or private) <span class="req">*</span></label>
+    <div class="field-hint">Include client name and a brief description of the work</div>
+    <textarea name="key_contracts" required placeholder="1. Client Name — description of work&#10;2. Client Name — description of work"></textarea>
+    <div class="error-msg">Required</div>
+  </div>
+
+  <div class="field">
+    <label>For each public sector client listed, please share details</label>
+    <div class="field-hint">Buyer organisation name, year(s) of delivery, route of engagement (direct contract / framework call-off / subcontractor / delivery partner / informal)</div>
+    <textarea name="public_client_details" rows="4" placeholder="e.g. NHS Digital — 2024 — Framework call-off"></textarea>
+  </div>
+</div>
+
+<!-- SECTION 5: Accreditations & Compliance -->
+<div class="form-section" data-section="5">
+  <div class="section-number">Section 5 of 7</div>
+  <div class="section-title">Accreditations &amp; compliance</div>
+  <div class="field-hint" style="margin-bottom:20px">This is a high-level view of your current compliance position, not a tender-specific eligibility check.</div>
+
+  <div class="field">
+    <label>Which accreditations or certifications do you currently hold? <span class="req">*</span></label>
+    <div class="option-group">
+      <div class="option-item"><input type="checkbox" name="accreditations" id="acc_1" value="ISO 9001"><label for="acc_1"><span class="indicator check"></span>ISO 9001</label></div>
+      <div class="option-item"><input type="checkbox" name="accreditations" id="acc_2" value="ISO 14001"><label for="acc_2"><span class="indicator check"></span>ISO 14001</label></div>
+      <div class="option-item"><input type="checkbox" name="accreditations" id="acc_3" value="ISO 45001"><label for="acc_3"><span class="indicator check"></span>ISO 45001</label></div>
+      <div class="option-item"><input type="checkbox" name="accreditations" id="acc_4" value="Cyber Essentials"><label for="acc_4"><span class="indicator check"></span>Cyber Essentials</label></div>
+      <div class="option-item"><input type="checkbox" name="accreditations" id="acc_5" value="Cyber Essentials Plus"><label for="acc_5"><span class="indicator check"></span>Cyber Essentials Plus</label></div>
+      <div class="option-item"><input type="checkbox" name="accreditations" id="acc_6" value="IASME"><label for="acc_6"><span class="indicator check"></span>IASME</label></div>
+      <div class="option-item"><input type="checkbox" name="accreditations" id="acc_7" value="CHAS"><label for="acc_7"><span class="indicator check"></span>CHAS</label></div>
+      <div class="option-item"><input type="checkbox" name="accreditations" id="acc_8" value="Constructionline"><label for="acc_8"><span class="indicator check"></span>Constructionline</label></div>
+      <div class="option-item"><input type="checkbox" name="accreditations" id="acc_9" value="SafeContractor"><label for="acc_9"><span class="indicator check"></span>SafeContractor</label></div>
+      <div class="option-item"><input type="checkbox" name="accreditations" id="acc_10" value="DBS processes in place"><label for="acc_10"><span class="indicator check"></span>DBS processes in place</label></div>
+      <div class="option-item"><input type="checkbox" name="accreditations" id="acc_11" value="None"><label for="acc_11"><span class="indicator check"></span>None</label></div>
+      <div class="option-item"><input type="checkbox" name="accreditations" id="acc_12" value="Other" data-shows="accreditation_other_field"><label for="acc_12"><span class="indicator check"></span>Other</label></div>
+    </div>
+    <div class="conditional" id="accreditation_other_field">
+      <input type="text" name="accreditations_other" placeholder="Please specify other accreditations">
+    </div>
+    <div class="error-msg">Please select at least one</div>
+  </div>
+
+  <div class="field">
+    <label>Current insurance levels <span class="req">*</span></label>
+    <div class="field-hint">Professional indemnity, employer's liability, and public liability cover levels</div>
+    <textarea name="insurance_levels" required placeholder="e.g. Professional Indemnity £1m, Employers Liability £10m, Public Liability £5m"></textarea>
+    <div class="error-msg">Required</div>
+  </div>
+
+  <div class="field">
+    <label>Any live or historic issues we should be aware of? <span class="req">*</span></label>
+    <div class="option-group">
+      <div class="option-item"><input type="checkbox" name="issues" id="iss_1" value="Contract termination"><label for="iss_1"><span class="indicator check"></span>Contract termination</label></div>
+      <div class="option-item"><input type="checkbox" name="issues" id="iss_2" value="Poor performance notice"><label for="iss_2"><span class="indicator check"></span>Poor performance notice</label></div>
+      <div class="option-item"><input type="checkbox" name="issues" id="iss_3" value="Litigation"><label for="iss_3"><span class="indicator check"></span>Litigation</label></div>
+      <div class="option-item"><input type="checkbox" name="issues" id="iss_4" value="Financial distress"><label for="iss_4"><span class="indicator check"></span>Financial distress</label></div>
+      <div class="option-item"><input type="checkbox" name="issues" id="iss_5" value="None"><label for="iss_5"><span class="indicator check"></span>None of the above</label></div>
+    </div>
+    <div class="error-msg">Required</div>
+  </div>
+</div>
+
+<!-- SECTION 6: Target Direction -->
+<div class="form-section" data-section="6">
+  <div class="section-number">Section 6 of 7</div>
+  <div class="section-title">Target direction</div>
+
+  <div class="field">
+    <label>What is your main goal for public sector in the next 12 months? <span class="req">*</span></label>
+    <div class="option-group">
+      <div class="option-item"><input type="radio" name="ps_goal" id="pg_1" value="Win first contract" required><label for="pg_1"><span class="indicator"></span>Win first contract</label></div>
+      <div class="option-item"><input type="radio" name="ps_goal" id="pg_2" value="Build a consistent pipeline"><label for="pg_2"><span class="indicator"></span>Build a consistent pipeline</label></div>
+      <div class="option-item"><input type="radio" name="ps_goal" id="pg_3" value="Replace private sector revenue"><label for="pg_3"><span class="indicator"></span>Replace private sector revenue</label></div>
+      <div class="option-item"><input type="radio" name="ps_goal" id="pg_4" value="Enter via subcontracting first"><label for="pg_4"><span class="indicator"></span>Enter via subcontracting first</label></div>
+      <div class="option-item"><input type="radio" name="ps_goal" id="pg_5" value="Other" data-shows="goal_other_field"><label for="pg_5"><span class="indicator"></span>Other</label></div>
+    </div>
+    <div class="conditional" id="goal_other_field">
+      <input type="text" name="ps_goal_other" placeholder="Please specify">
+    </div>
+    <div class="error-msg">Required</div>
+  </div>
+
+  <div class="field">
+    <label>How comfortable are you investing time and money in bids without guaranteed return? <span class="req">*</span></label>
+    <div class="scale-row">
+      <div class="scale-item"><input type="radio" name="bid_comfort" id="bc_1" value="1" required><label for="bc_1">1</label></div>
+      <div class="scale-item"><input type="radio" name="bid_comfort" id="bc_2" value="2"><label for="bc_2">2</label></div>
+      <div class="scale-item"><input type="radio" name="bid_comfort" id="bc_3" value="3"><label for="bc_3">3</label></div>
+      <div class="scale-item"><input type="radio" name="bid_comfort" id="bc_4" value="4"><label for="bc_4">4</label></div>
+      <div class="scale-item"><input type="radio" name="bid_comfort" id="bc_5" value="5"><label for="bc_5">5</label></div>
+    </div>
+    <div class="scale-labels"><span>Not comfortable</span><span>Very comfortable</span></div>
+    <div class="error-msg">Required</div>
+  </div>
+
+  <div class="field">
+    <label>Which public sector areas do you want to sell into? <span class="req">*</span></label>
+    <div class="option-group">
+      <div class="option-item"><input type="checkbox" name="target_sectors" id="sec_1" value="Local authority"><label for="sec_1"><span class="indicator check"></span>Local authority</label></div>
+      <div class="option-item"><input type="checkbox" name="target_sectors" id="sec_2" value="NHS / health"><label for="sec_2"><span class="indicator check"></span>NHS / health</label></div>
+      <div class="option-item"><input type="checkbox" name="target_sectors" id="sec_3" value="Central government"><label for="sec_3"><span class="indicator check"></span>Central government</label></div>
+      <div class="option-item"><input type="checkbox" name="target_sectors" id="sec_4" value="Blue light (police, fire)"><label for="sec_4"><span class="indicator check"></span>Blue light (police, fire)</label></div>
+      <div class="option-item"><input type="checkbox" name="target_sectors" id="sec_5" value="Schools / education"><label for="sec_5"><span class="indicator check"></span>Schools / education</label></div>
+      <div class="option-item"><input type="checkbox" name="target_sectors" id="sec_6" value="Housing associations"><label for="sec_6"><span class="indicator check"></span>Housing associations</label></div>
+      <div class="option-item"><input type="checkbox" name="target_sectors" id="sec_7" value="Universities"><label for="sec_7"><span class="indicator check"></span>Universities</label></div>
+      <div class="option-item"><input type="checkbox" name="target_sectors" id="sec_8" value="Other / not sure"><label for="sec_8"><span class="indicator check"></span>Other / not sure</label></div>
+    </div>
+    <div class="error-msg">Please select at least one</div>
+  </div>
+
+  <div class="field">
+    <label>Any specific keywords, frameworks, or competitors we should know about?</label>
+    <textarea name="keywords_frameworks" rows="3" placeholder="e.g. G-Cloud, Digital Outcomes, specific framework names, known competitors..."></textarea>
+  </div>
+</div>
+
+<!-- SECTION 7: Booking & Final Check -->
+<div class="form-section" data-section="7">
+  <div class="section-number">Section 7 of 7</div>
+  <div class="section-title">Booking &amp; final check</div>
+
+  <div class="field">
+    <label>Anything else you want us to consider?</label>
+    <textarea name="anything_else" rows="4" placeholder="Any additional context, timelines, concerns, or priorities..."></textarea>
+  </div>
+
+  <div class="field">
+    <label>Please confirm you understand the following <span class="req">*</span></label>
+    <div class="confirm-group">
+      <label class="confirm-item">
+        <input type="checkbox" name="confirm_1" value="yes" required>
+        <span>This audit is readiness and opportunity fit, not bid writing or tender pack review</span>
+      </label>
+      <label class="confirm-item">
+        <input type="checkbox" name="confirm_2" value="yes" required>
+        <span>We will not confirm eligibility for specific tenders or assess compliance against live tender requirements as part of this assessment</span>
+      </label>
+      <label class="confirm-item">
+        <input type="checkbox" name="confirm_3" value="yes" required>
+        <span>I understand I may be advised not to pursue public sector yet</span>
+      </label>
+    </div>
+    <div class="error-msg">Please confirm all items above</div>
+  </div>
+
+  <div class="submit-area">
+    <button type="submit" class="submit-btn" id="submitBtn">Submit audit questionnaire</button>
+    <div class="submit-note">Your information will be sent securely to Tendigo for review</div>
+  </div>
+</div>
+
+</form>
+
+<div class="success-card" id="successCard">
+  <div class="success-icon">&#10003;</div>
+  <h2>Submitted successfully</h2>
+  <p>Thank you — we've received your questionnaire. Our team will review your information and prepare your Public Sector Viability Audit. We'll be in touch to schedule a call to walk through our findings and recommendations.</p>
+</div>
+
+<div class="form-footer">
+  <p>Powered by <a href="https://tendigo.co.uk" target="_blank" rel="noopener">Tendigo</a></p>
+</div>
+
+</div>
+
+<script>
+// =============================================
+// CONFIGURATION — Replace this URL with your
+// deployed Google Apps Script web app URL
+// =============================================
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyktyHVH9igZsZm5GxSx2gKxbhSYBlVDVA5alxZ4x51gz7BPhxJrr6g-fZRLuJS1-mJlQ/exec';
+
+// Conditional field logic
+document.querySelectorAll('[data-shows]').forEach(input => {
+  const targetId = input.dataset.shows;
+  const target = document.getElementById(targetId);
+  const name = input.name;
+  const type = input.type;
+
+  function update() {
+    if (type === 'radio') {
+      target.classList.toggle('visible', input.checked);
+    } else {
+      target.classList.toggle('visible', input.checked);
+    }
+  }
+
+  if (type === 'radio') {
+    document.querySelectorAll(`input[name="${name}"]`).forEach(r => r.addEventListener('change', update));
+  } else {
+    input.addEventListener('change', update);
+  }
+});
+
+// Progress bar
+function updateProgress() {
+  const sections = document.querySelectorAll('.form-section');
+  const total = sections.length;
+  let filled = 0;
+  sections.forEach(sec => {
+    const inputs = sec.querySelectorAll('input[required],textarea[required],select[required]');
+    let sectionFilled = true;
+    inputs.forEach(inp => {
+      if (inp.type === 'radio') {
+        const name = inp.name;
+        if (!sec.querySelector(`input[name="${name}"]:checked`)) sectionFilled = false;
+      } else if (!inp.value.trim()) {
+        sectionFilled = false;
+      }
+    });
+    if (sectionFilled && inputs.length > 0) filled++;
+  });
+  document.getElementById('progressBar').style.width = Math.round((filled / total) * 100) + '%';
+}
+document.addEventListener('input', updateProgress);
+document.addEventListener('change', updateProgress);
+
+// Collect form data as structured JSON
+function collectFormData() {
+  const form = document.getElementById('auditForm');
+  const data = {};
+
+  // Text, email, tel, url inputs and textareas
+  form.querySelectorAll('input[type="text"],input[type="email"],input[type="tel"],input[type="url"],textarea').forEach(el => {
+    if (el.name) data[el.name] = el.value.trim();
+  });
+
+  // Radio buttons
+  const radioGroups = new Set();
+  form.querySelectorAll('input[type="radio"]').forEach(r => radioGroups.add(r.name));
+  radioGroups.forEach(name => {
+    const checked = form.querySelector(`input[name="${name}"]:checked`);
+    data[name] = checked ? checked.value : '';
+  });
+
+  // Checkbox groups
+  const checkGroups = {};
+  form.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    if (cb.name.startsWith('confirm')) {
+      data[cb.name] = cb.checked ? 'Yes' : 'No';
+    } else {
+      if (!checkGroups[cb.name]) checkGroups[cb.name] = [];
+      if (cb.checked) checkGroups[cb.name].push(cb.value);
+    }
+  });
+  Object.entries(checkGroups).forEach(([name, vals]) => {
+    data[name] = vals.join(', ');
+  });
+
+  data['submitted_at'] = new Date().toISOString();
+  return data;
+}
+
+// Validation
+function validateForm() {
+  let valid = true;
+  const form = document.getElementById('auditForm');
+
+  // Clear previous errors
+  form.querySelectorAll('.field.error').forEach(f => f.classList.remove('error'));
+
+  // Required text/email/tel/url/textarea
+  form.querySelectorAll('input[required]:not([type="radio"]):not([type="checkbox"]),textarea[required]').forEach(inp => {
+    if (!inp.value.trim()) {
+      inp.closest('.field').classList.add('error');
+      valid = false;
+    }
+  });
+
+  // Email format
+  const email = form.querySelector('input[name="email"]');
+  if (email && email.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+    email.closest('.field').classList.add('error');
+    valid = false;
+  }
+
+  // Required radio groups
+  const radioNames = new Set();
+  form.querySelectorAll('input[type="radio"][required]').forEach(r => radioNames.add(r.name));
+  radioNames.forEach(name => {
+    if (!form.querySelector(`input[name="${name}"]:checked`)) {
+      const field = form.querySelector(`input[name="${name}"]`).closest('.field');
+      field.classList.add('error');
+      valid = false;
+    }
+  });
+
+  // Required confirmation checkboxes
+  form.querySelectorAll('.confirm-group input[type="checkbox"][required]').forEach(cb => {
+    if (!cb.checked) {
+      cb.closest('.field').classList.add('error');
+      valid = false;
+    }
+  });
+
+  // Scroll to first error
+  if (!valid) {
+    const firstError = form.querySelector('.field.error');
+    if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  return valid;
+}
+
+// Submit handler
+document.getElementById('auditForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  if (!validateForm()) return;
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+
+  const data = collectFormData();
+
+  try {
+    const response = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    // no-cors means we can't read the response, but if it doesn't throw, it went through
+    document.getElementById('auditForm').style.display = 'none';
+    document.getElementById('successCard').classList.add('visible');
+    document.getElementById('progressBar').style.width = '100%';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  } catch (err) {
+    alert('There was a problem submitting the form. Please try again or contact us directly.');
+    btn.disabled = false;
+    btn.textContent = 'Submit audit questionnaire';
+  }
+});
+</script>
+</body>
+</html>
